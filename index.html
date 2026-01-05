@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L-TECH | Giải Pháp Công Nghệ Toàn Cầu</title>
+    <meta name="description" content="L-TECH - Đối tác công nghệ tin cậy, cung cấp giải pháp Website, App Mobile và Chuyển đổi số chuẩn quốc tế.">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        /* --- 0. PRELOADER CSS (HIỆU ỨNG NHỊP TIM) --- */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #1e272e; /* Nền tối công nghệ */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        .loader-content {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Vòng tròn nhịp tim */
+        .heartbeat-circle {
+            width: 150px;
+            height: 150px;
+            border: 4px solid var(--primary-blue, #00a8ff);
+            border-radius: 50%;
+            position: absolute;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(0, 168, 255, 0.5), inset 0 0 20px rgba(0, 168, 255, 0.5);
+        }
+
+        .heartbeat-circle:nth-child(2) {
+            animation-delay: 0.2s;
+            width: 160px;
+            height: 160px;
+            opacity: 0.5;
+        }
+
+        /* Tên thương hiệu ở giữa */
+        .loader-text {
+            color: #fff;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .loader-text h2 {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: 2px;
+            background: linear-gradient(to right, #fff, #00a8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .loader-text p {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 5px;
+            color: #00a8ff;
+            font-weight: 600;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(0.8); opacity: 0.5; box-shadow: 0 0 0px rgba(0, 168, 255, 0); }
+            30% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 40px rgba(0, 168, 255, 0.8); }
+            100% { transform: scale(0.8); opacity: 0.5; box-shadow: 0 0 0px rgba(0, 168, 255, 0); }
+        }
+
+        /* Khi load xong sẽ thêm class này bằng JS */
+        .loader-hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* --- 1. GLOBAL VARIABLES & RESET (Giữ nguyên của bạn) --- */
+        :root {
+            --primary-blue: #00a8ff;
+            --deep-blue: #0056b3;
+            --tech-dark: #1e272e;
+            --text-gray: #576574;
+            --bg-white: #ffffff;
+            --bg-light: #f4f7f6;
+            --gradient: linear-gradient(135deg, #00a8ff 0%, #0097e6 100%);
+            --shadow: 0 10px 40px rgba(0, 168, 255, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--tech-dark);
+            background-color: var(--bg-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 15px 0;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .nav-flex { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo {
+            font-size: 28px; font-weight: 800; letter-spacing: -1px;
+            color: var(--deep-blue); display: flex; align-items: center; gap: 8px;
+        }
+        .logo span { color: var(--primary-blue); }
+
+        .nav-menu { display: flex; gap: 40px; }
+        .nav-menu a { font-weight: 600; font-size: 14px; color: var(--tech-dark); text-transform: uppercase; }
+        .nav-menu a:hover { color: var(--primary-blue); }
+
+        .btn-quote {
+            padding: 12px 30px; background: var(--gradient); color: #fff;
+            border-radius: 6px; font-weight: 600; font-size: 14px;
+            box-shadow: 0 5px 15px rgba(0, 168, 255, 0.3);
+        }
+        .btn-quote:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 168, 255, 0.4); }
+
+        .hero {
+            padding: 160px 0 100px;
+            background: radial-gradient(circle at top right, rgba(0, 168, 255, 0.05), transparent);
+            position: relative;
+        }
+
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+
+        .hero-content h1 {
+            font-size: 3.5rem; line-height: 1.2; font-weight: 800; margin-bottom: 20px;
+            background: linear-gradient(to right, #1e272e, #00a8ff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p { font-size: 1.1rem; color: var(--text-gray); margin-bottom: 40px; max-width: 500px; }
+        
+        .stats-bar {
+            display: flex; gap: 40px; padding-top: 30px; border-top: 1px solid #eee;
+        }
+        .stat-item h3 { font-size: 2rem; color: var(--deep-blue); font-weight: 800; }
+        .stat-item p { font-size: 0.9rem; color: var(--text-gray); }
+
+        .hero-img { position: relative; }
+        .hero-img img { width: 100%; border-radius: 20px; box-shadow: var(--shadow); }
+        
+        .badge-exp {
+            position: absolute; bottom: -20px; left: -20px;
+            background: #fff; padding: 20px; border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 15px;
+            z-index: 5;
+        }
+        .badge-icon { width: 50px; height: 50px; background: #e3f2fd; color: var(--primary-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+
+        .tech-stack { padding: 50px 0; background: var(--bg-light); overflow: hidden; }
+        .tech-slide { display: flex; gap: 50px; animation: slide 20s linear infinite; white-space: nowrap; }
+        .tech-item { font-size: 24px; font-weight: 700; color: #cbd5e0; display: flex; align-items: center; gap: 10px; }
+        
+        @keyframes slide { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+        .section-padding { padding: 100px 0; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header span { color: var(--primary-blue); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 13px; }
+        .section-header h2 { font-size: 2.5rem; margin-top: 10px; font-weight: 800; }
+
+        .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .vision-card {
+            padding: 40px; background: #fff; border: 1px solid #eee; border-radius: 12px;
+            transition: 0.3s;
+        }
+        .vision-card:hover { border-color: var(--primary-blue); transform: translateY(-10px); box-shadow: var(--shadow); }
+        .v-icon { font-size: 40px; color: var(--primary-blue); margin-bottom: 20px; }
+        .vision-card h3 { margin-bottom: 15px; font-size: 1.2rem; }
+
+        .service-bg { background: #1e272e; color: #fff; position: relative; overflow: hidden; }
+        .service-bg::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/cubes.png'); opacity: 0.1;
+        }
+        
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; position: relative; z-index: 1; }
+        .service-box {
+            background: rgba(255,255,255,0.05); backdrop-filter: blur(10px);
+            padding: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+        .service-box:hover { background: var(--primary-blue); border-color: var(--primary-blue); }
+        .service-box h3 { font-size: 1.5rem; margin: 20px 0 10px; }
+        .service-box p { color: #a4b0be; font-size: 0.95rem; }
+        .service-box:hover p { color: #fff; }
+
+        .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center; position: relative; }
+        .step-item { position: relative; z-index: 2; }
+        .step-num {
+            width: 60px; height: 60px; background: var(--bg-light); color: var(--tech-dark);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 20px; margin: 0 auto 20px; border: 2px solid var(--primary-blue);
+            transition: 0.3s;
+        }
+        .step-item:hover .step-num { background: var(--primary-blue); color: #fff; }
+        
+        .price-table { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .price-col {
+            background: #fff; padding: 50px 30px; border-radius: 15px; border: 1px solid #eee; text-align: center;
+            transition: 0.3s;
+        }
+        .price-col.active { border: 2px solid var(--primary-blue); box-shadow: var(--shadow); transform: scale(1.05); }
+        .price-tag { font-size: 40px; color: var(--deep-blue); font-weight: 800; margin: 20px 0; }
+        .feature-list li { margin: 15px 0; color: var(--text-gray); font-size: 15px; }
+        .feature-list i { color: #2ecc71; margin-right: 8px; }
+
+        .cta-section {
+            background: var(--gradient); color: #fff; text-align: center; padding: 80px 0; border-radius: 20px;
+        }
+        
+        footer { background: var(--tech-dark); color: #fff; padding: 70px 0 20px; font-size: 14px; }
+        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 50px; }
+        .footer-col h4 { color: #fff; margin-bottom: 20px; font-size: 16px; }
+        .footer-col ul li { margin-bottom: 12px; }
+        .footer-col a { color: #a4b0be; }
+        .footer-col a:hover { color: var(--primary-blue); }
+
+        @media (max-width: 768px) {
+            .hero-grid, .about-grid, .price-table, .process-steps, .footer-grid { grid-template-columns: 1fr; }
+            .nav-menu { display: none; }
+            .hero-content h1 { font-size: 2.5rem; }
+            .price-col.active { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+<style>
+        /* 1. CSS CHO NÚT LIÊN HỆ GÓC PHẢI */
+        .fixed-contact {
+            position: fixed;
+            bottom: 30px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .contact-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .contact-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .contact-btn.zalo {
+            background: #0084FF;
+        }
+
+        .contact-btn.phone {
+            background: #2ecc71;
+            animation: phone-shake 1.5s infinite;
+        }
+
+        @keyframes phone-shake {
+            0% { transform: rotate(0); }
+            10% { transform: rotate(-15deg); }
+            20% { transform: rotate(15deg); }
+            30% { transform: rotate(-15deg); }
+            40% { transform: rotate(15deg); }
+            50% { transform: rotate(0); }
+            100% { transform: rotate(0); }
+        }
+
+        /* 2. CSS CHO POPUP QUẢNG CÁO */
+        .popup-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none; /* Ẩn mặc định */
+            justify-content: center;
+            align-items: center;
+            z-index: 100000;
+            backdrop-filter: blur(5px);
+        }
+
+        .popup-content {
+            background: #fff;
+            width: 90%;
+            max-width: 450px;
+            padding: 40px;
+            border-radius: 20px;
+            position: relative;
+            text-align: center;
+            animation: popup-zoom 0.5s ease-out;
+        }
+
+        @keyframes popup-zoom {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 15px; right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #ccc;
+            transition: 0.3s;
+        }
+
+        .popup-close:hover { color: var(--tech-dark); }
+
+        .popup-badge {
+            background: var(--primary-blue);
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .popup-content h3 { font-size: 28px; margin-bottom: 10px; color: var(--tech-dark); }
+        .popup-content p { color: var(--text-gray); margin-bottom: 25px; }
+        
+        .popup-btn {
+            display: block;
+            background: var(--gradient);
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+
+    <div class="fixed-contact">
+        <a href="https://zalo.me/0347285304" target="_blank" class="contact-btn zalo" title="Chat Zalo">
+            <i class="fab fa-facebook-messenger"></i> </a>
+        <a href="tel:0347285304" class="contact-btn phone" title="Gọi ngay">
+            <i class="fas fa-phone-alt"></i>
+        </a>
+    </div>
+
+    <div class="popup-overlay" id="promoPopup">
+        <div class="popup-content">
+            <span class="popup-close" onclick="closePopup()">&times;</span>
+            <div class="popup-badge">QUÀ TẶNG THÁNG 01/2026</div>
+            <h3>Khởi Nghiệp 0đ</h3>
+            <p>Đăng ký thiết kế Website ngay hôm nay để nhận gói <b>Hosting & Tên miền .com</b> hoàn toàn miễn phí trị giá 2.500.000đ.</p>
+            <a href="https://zalo.me/0347285304" class="popup-btn">Nhận Ưu Đãi Ngay</a>
+            <p style="font-size: 11px; margin-top: 15px; color: #999;">* Ưu đãi áp dụng cho 5 khách hàng đầu tiên trong tuần.</p>
+        </div>
+    </div>
+
+    <script>
+        // Hiển thị popup sau 3 giây khi trang web load xong
+        window.addEventListener("load", function() {
+            setTimeout(() => {
+                document.getElementById("promoPopup").style.display = "flex";
+            }, 3000); 
+        });
+
+        // Hàm đóng popup
+        function closePopup() {
+            document.getElementById("promoPopup").style.display = "none";
+        }
+
+        // Đóng khi click ra ngoài vùng popup
+        window.onclick = function(event) {
+            let overlay = document.getElementById("promoPopup");
+            if (event.target == overlay) {
+                overlay.style.display = "none";
+            }
+        }
+    </script>
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="heartbeat-circle"></div>
+            <div class="heartbeat-circle"></div>
+            <div class="loader-text">
+                <h2>L-TECH</h2>
+                <p>Trần Hữu Luân</p>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="container nav-flex">
+            <div class="logo">
+                <i class="fas fa-layer-group" style="color: var(--primary-blue);"></i> L-TECH
+            </div>
+            <nav class="nav-menu">
+                <a href="#about">Về L-Tech</a>
+                <a href="#services">Giải Pháp</a>
+                <a href="#process">Quy Trình</a>
+                <a href="#pricing">Bảng Giá</a>
+            </nav>
+            <a href="https://zalo.me/0347285304" class="btn-quote">Liên Hệ Tư Vấn</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-content" data-aos="fade-right">
+                <div style="display: inline-block; background: #e3f2fd; color: var(--deep-blue); padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 20px;">
+                    🚀 TOP 1 CÔNG NGHỆ 2026
+                </div>
+                <h1>Kiến Tạo Tương Lai<br>Kỹ Thuật Số</h1>
+                <p>L-TECH mang đến giải pháp Website & Mobile App đẳng cấp quốc tế, giúp doanh nghiệp tối ưu vận hành và bứt phá doanh thu.</p>
+                <div style="display: flex; gap: 20px;">
+                    <a href="#pricing" class="btn-quote">Bắt Đầu Ngay</a>
+                    <a href="#services" style="padding: 12px 20px; font-weight: 600; color: var(--tech-dark); display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-play-circle" style="font-size: 20px; color: var(--primary-blue);"></i> Xem Hồ Sơ
+                    </a>
+                </div>
+
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <h3>5+</h3>
+                        <p>Năm Kinh Nghiệm</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>100%</h3>
+                        <p>Hài Lòng</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>24/7</h3>
+                        <p>Hỗ Trợ Kỹ Thuật</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-img" data-aos="fade-left">
+                <img src="https://images.unsplash.com/photo-1551434678-e076c2236033?q=80&w=1000&auto=format&fit=crop" alt="L-Tech Team">
+                <div class="badge-exp">
+                    <div class="badge-icon"><i class="fas fa-check-circle"></i></div>
+                    <div>
+                        <h4 style="font-size: 15px; font-weight: 700;">"L-Tech không chỉ là một đơn vị code web. Chúng tôi được dẫn dắt bởi Founder Trần Hữu Luân – người đã xây dựng hệ thống quản lý thư viện online toàn quốc từ khi còn là học sinh lớp 10. Tại L-Tech, chúng tôi mang tư duy hệ thống quy mô lớn áp dụng vào từng dự án nhỏ nhất của bạn."</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="tech-stack">
+        <div class="container">
+            <div class="tech-slide">
+                <div class="tech-item"><i class="fab fa-react" style="color: #61dafb"></i> REACT</div>
+                <div class="tech-item"><i class="fab fa-node-js" style="color: #3c873a"></i> NODEJS</div>
+                <div class="tech-item"><i class="fab fa-aws" style="color: #ff9900"></i> AWS CLOUD</div>
+                <div class="tech-item"><i class="fab fa-google" style="color: #4285f4"></i> GOOGLE</div>
+                <div class="tech-item"><i class="fab fa-python" style="color: #ffd343"></i> PYTHON</div>
+                <div class="tech-item"><i class="fas fa-database" style="color: #00a8ff"></i> MONGODB</div>
+            </div>
+        </div>
+    </div>
+
+    <section id="about" class="section-padding">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span>Về Chúng Tôi</span>
+                <h2>Giá Trị Cốt Lõi Của L-TECH</h2>
+                <p style="color: #666; max-width: 600px; margin: 10px auto;">Chúng tôi không chỉ viết mã, chúng tôi xây dựng nền tảng cho sự thành công của bạn.</p>
+            </div>
+            
+            <div class="about-grid">
+                <div class="vision-card" data-aos="fade-up" data-aos-delay="100">
+                    <i class="fas fa-eye v-icon"></i>
+                    <h3>Tầm Nhìn</h3>
+                    <p style="color: var(--text-gray);">Trở thành Top 10 công ty cung cấp giải pháp chuyển đổi số tại Việt Nam vào năm 2030, vươn tầm thị trường Âu-Mỹ.</p>
+                </div>
+                <div class="vision-card" data-aos="fade-up" data-aos-delay="200">
+                    <i class="fas fa-bullseye v-icon"></i>
+                    <h3>Sứ Mệnh</h3>
+                    <p style="color: var(--text-gray);">Đơn giản hóa công nghệ cho mọi doanh nghiệp. Mang đến sản phẩm chất lượng cao với chi phí tối ưu nhất.</p>
+                </div>
+                <div class="vision-card" data-aos="fade-up" data-aos-delay="300">
+                    <i class="fas fa-user-shield v-icon"></i>
+                    <h3>Uy Tín</h3>
+                    <p style="color: var(--text-gray);">Cam kết bảo mật tuyệt đối. Tác giả của các dự án cấp Quốc gia, minh chứng năng lực từ nền tảng vững chắc.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="section-padding service-bg">
+        <div class="container">
+            <div class="section-header" style="color: #fff;" data-aos="fade-up">
+                <span style="color: var(--primary-blue);">Lĩnh Vực Hoạt Động</span>
+                <h2 style="color: #fff;">Hệ Sinh Thái Dịch Vụ</h2>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-box" data-aos="zoom-in" data-aos-delay="100">
+                    <i class="fas fa-laptop-code" style="font-size: 40px; color: var(--primary-blue); margin-bottom: 20px;"></i>
+                    <h3>Thiết Kế Website</h3>
+                    <p>Web Doanh nghiệp, Landing Page, Blog cá nhân chuẩn UI/UX và SEO Mobile First.</p>
+                </div>
+                <div class="service-box" data-aos="zoom-in" data-aos-delay="200">
+                    <i class="fas fa-mobile-alt" style="font-size: 40px; color: var(--primary-blue); margin-bottom: 20px;"></i>
+                    <h3>Mobile App Dev</h3>
+                    <p>Phát triển ứng dụng iOS/Android đa nền tảng (Flutter/React Native) hiệu năng cao.</p>
+                </div>
+                <div class="service-box" data-aos="zoom-in" data-aos-delay="300">
+                    <i class="fas fa-shopping-cart" style="font-size: 40px; color: var(--primary-blue); margin-bottom: 20px;"></i>
+                    <h3>E-Commerce</h3>
+                    <p>Hệ thống thương mại điện tử tích hợp thanh toán, quản lý kho vận và CRM khách hàng.</p>
+                </div>
+                <div class="service-box" data-aos="zoom-in" data-aos-delay="400">
+                    <i class="fas fa-search-dollar" style="font-size: 40px; color: var(--primary-blue); margin-bottom: 20px;"></i>
+                    <h3>SEO & Marketing</h3>
+                    <p>Tối ưu hóa công cụ tìm kiếm, đẩy từ khóa lên Top Google bền vững, tăng tỉ lệ chuyển đổi.</p>
+                </div>
+                <div class="service-box" data-aos="zoom-in" data-aos-delay="500">
+                    <i class="fas fa-server" style="font-size: 40px; color: var(--primary-blue); margin-bottom: 20px;"></i>
+                    <h3>Hosting & Cloud</h3>
+                    <p>Cung cấp Server tốc độ cao, bảo mật dữ liệu, backup định kỳ hàng ngày.</p>
+                </div>
+                <div class="service-box" data-aos="zoom-in" data-aos-delay="600">
+                    <i class="fas fa-tools" style="font-size: 40px; color: var(--primary-blue); margin-bottom: 20px;"></i>
+                    <h3>Bảo Trì Hệ Thống</h3>
+                    <p>Dịch vụ nâng cấp, sửa lỗi và vận hành website trọn đời cho doanh nghiệp.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="process" class="section-padding">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span>Quy Trình Làm Việc</span>
+                <h2>4 Bước Chuẩn Quốc Tế</h2>
+            </div>
+            
+            <div class="process-steps">
+                <div class="step-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="step-num">01</div>
+                    <h4>Tư Vấn & Khảo Sát</h4>
+                    <p style="font-size: 13px; color: #666; margin-top: 10px;">Lắng nghe nhu cầu, phân tích đối thủ.</p>
+                </div>
+                <div class="step-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="step-num">02</div>
+                    <h4>Thiết Kế UI/UX</h4>
+                    <p style="font-size: 13px; color: #666; margin-top: 10px;">Lên ý tưởng giao diện demo độc quyền.</p>
+                </div>
+                <div class="step-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="step-num">03</div>
+                    <h4>Lập Trình (Coding)</h4>
+                    <p style="font-size: 13px; color: #666; margin-top: 10px;">Code sạch, tối ưu tốc độ và bảo mật.</p>
+                </div>
+                <div class="step-item" data-aos="fade-up" data-aos-delay="400">
+                    <div class="step-num">04</div>
+                    <h4>Bàn Giao & Hỗ Trợ</h4>
+                    <p style="font-size: 13px; color: #666; margin-top: 10px;">Hướng dẫn sử dụng và bảo hành trọn đời.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="section-padding" style="background: var(--bg-light);">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span>Đầu Tư Thông Minh</span>
+                <h2>Bảng Giá Dịch Vụ</h2>
+            </div>
+            
+            <div class="price-table">
+                <div class="price-col" data-aos="flip-left">
+                    <h4>START-UP</h4>
+                    <div class="price-tag">3.500K</div>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Landing Page 1 Trang</li>
+                        <li><i class="fas fa-check"></i> Giao diện Responsive</li>
+                        <li><i class="fas fa-check"></i> Tối ưu tốc độ tải</li>
+                        <li><i class="fas fa-check"></i> Bảo hành 12 tháng</li>
+                    </ul>
+                    <a href="https://zalo.me/0347285304" class="btn-quote" style="background: #fff; color: var(--primary-blue); border: 1px solid var(--primary-blue);">Chọn Gói</a>
+                </div>
+
+                <div class="price-col active" data-aos="flip-left" data-aos-delay="100">
+                    <div style="margin-bottom: 15px; color: var(--primary-blue); font-weight: 700; letter-spacing: 1px;">BEST CHOICE</div>
+                    <h4>BUSINESS</h4>
+                    <div class="price-tag" style="color: var(--primary-blue);">7.500K</div>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> <strong>Website Đa Trang (Full)</strong></li>
+                        <li><i class="fas fa-check"></i> <strong>Chuẩn SEO Google 100%</strong></li>
+                        <li><i class="fas fa-check"></i> Tích hợp Chat/Zalo/Form</li>
+                        <li><i class="fas fa-check"></i> CMS Quản trị dễ dùng</li>
+                        <li><i class="fas fa-check"></i> <strong>Bảo hành trọn đời</strong></li>
+                    </ul>
+                    <a href="https://zalo.me/0347285304" class="btn-quote">Đăng Ký Ngay</a>
+                </div>
+
+                <div class="price-col" data-aos="flip-left" data-aos-delay="200">
+                    <h4>ENTERPRISE</h4>
+                    <div class="price-tag">Liên Hệ</div>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Hệ thống Web App / SaaS</li>
+                        <li><i class="fas fa-check"></i> Thanh toán Online (Visa/MoMo)</li>
+                        <li><i class="fas fa-check"></i> Kết nối API bên thứ 3</li>
+                        <li><i class="fas fa-check"></i> Hỗ trợ Server riêng</li>
+                    </ul>
+                    <a href="https://zalo.me/0347285304" class="btn-quote" style="background: #fff; color: var(--primary-blue); border: 1px solid var(--primary-blue);">Tư Vấn 1:1</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <div class="cta-section" data-aos="zoom-in">
+                <h2>Bạn Đã Sẵn Sàng Số Hóa Doanh Nghiệp?</h2>
+                <p style="margin: 20px 0 40px; opacity: 0.9;">Liên hệ ngay với L-TECH để nhận bản kế hoạch demo miễn phí.</p>
+                <div style="font-size: 24px; font-weight: 700; background: rgba(255,255,255,0.2); display: inline-block; padding: 15px 40px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.5);">
+                    <i class="fas fa-phone-alt"></i> 0347.285.304
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="color: #fff; margin-bottom: 20px;">
+                        <i class="fas fa-layer-group" style="color: var(--primary-blue);"></i> L-TECH
+                    </div>
+                    <p style="color: #a4b0be; line-height: 1.8;">
+                        L-TECH là đơn vị tiên phong trong lĩnh vực thiết kế web và giải pháp phần mềm tại Việt Nam. Chúng tôi cam kết chất lượng và sự hài lòng tuyệt đối.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Dịch Vụ</h4>
+                    <ul>
+                        <li><a href="#">Thiết kế Website</a></li>
+                        <li><a href="#">Lập trình Mobile App</a></li>
+                        <li><a href="#">Marketing Online</a></li>
+                        <li><a href="#">Chăm sóc Website</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Về Chúng Tôi</h4>
+                    <ul>
+                        <li><a href="#">Hồ sơ năng lực</a></li>
+                        <li><a href="#">Tuyển dụng</a></li>
+                        <li><a href="#">Chính sách bảo mật</a></li>
+                        <li><a href="#">Điều khoản sử dụng</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Liên Hệ</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt" style="width: 20px;"></i> TP. Hồ Chí Minh, VN</li>
+                        <li><i class="fas fa-envelope" style="width: 20px;"></i> devhuuluanit@gmail.com</li>
+                        <li><i class="fas fa-phone" style="width: 20px;"></i> 0347.285.304</li>
+                    </ul>
+                </div>
+            </div>
+            <div style="border-top: 1px solid #333; padding-top: 20px; text-align: center; color: #777;">
+                <p>&copy; 2026 L-TECH Corporation. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // XỬ LÝ ẨN LOADING KHI LOAD XONG
+        window.addEventListener("load", function() {
+            const preloader = document.getElementById("preloader");
+            // Cho chạy thêm 1 giây để khách hàng kịp thấy hiệu ứng đẹp
+            setTimeout(() => {
+                preloader.classList.add("loader-hidden");
+            }, 1000);
+        });
+
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+</html>
