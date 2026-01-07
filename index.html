@@ -11,84 +11,108 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
-        /* --- 0. PRELOADER CSS (HIỆU ỨNG NHỊP TIM) --- */
+        /* --- 0. PRELOADER CAO CẤP (CYBER TECH SCAN) --- */
         #preloader {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-color: #1e272e; /* Nền tối công nghệ */
+            background-color: #0a0e12; 
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 99999;
-            transition: opacity 0.8s ease, visibility 0.8s;
+            transition: all 1s cubic-bezier(0.7, 0, 0.3, 1);
         }
 
-        .loader-content {
+        .loader-wrapper {
             position: relative;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
         }
 
-        /* Vòng tròn nhịp tim */
-        .heartbeat-circle {
-            width: 150px;
-            height: 150px;
-            border: 4px solid var(--primary-blue, #00a8ff);
+        /* Vòng tròn năng lượng xoay */
+        .energy-ring {
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
+            border: 2px solid rgba(0, 168, 255, 0.1);
+            border-top: 3px solid #00a8ff;
+            border-bottom: 3px solid #00a8ff;
             position: absolute;
-            animation: heartbeat 1.5s ease-in-out infinite;
-            box-shadow: 0 0 20px rgba(0, 168, 255, 0.5), inset 0 0 20px rgba(0, 168, 255, 0.5);
+            animation: spin 2s linear infinite;
+            box-shadow: 0 0 30px rgba(0, 168, 255, 0.3);
         }
 
-        .heartbeat-circle:nth-child(2) {
-            animation-delay: 0.2s;
-            width: 160px;
-            height: 160px;
-            opacity: 0.5;
+        .energy-ring::before {
+            content: '';
+            position: absolute;
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 168, 255, 0.1);
+            border-left: 3px solid #00d2ff;
+            border-right: 3px solid #00d2ff;
+            animation: spin-reverse 1.5s linear infinite;
         }
 
-        /* Tên thương hiệu ở giữa */
-        .loader-text {
-            color: #fff;
-            text-align: center;
+        /* Chữ L-TECH phát sáng */
+        .loader-brand {
             z-index: 10;
+            text-align: center;
         }
 
-        .loader-text h2 {
-            font-size: 24px;
-            font-weight: 800;
+        .loader-brand h2 {
+            font-size: 32px;
+            font-weight: 900;
             margin: 0;
-            letter-spacing: 2px;
-            background: linear-gradient(to right, #fff, #00a8ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: 8px;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(0, 168, 255, 0.8), 0 0 30px rgba(0, 168, 255, 0.4);
+            animation: pulse-glow 2s ease-in-out infinite;
         }
 
-        .loader-text p {
+        .loader-line {
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00a8ff, transparent);
+            margin-top: 10px;
+            animation: line-grow 2s ease-in-out infinite;
+        }
+
+        .loader-status {
+            margin-top: 40px;
             font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 4px;
-            margin-top: 5px;
             color: #00a8ff;
+            opacity: 0.8;
             font-weight: 600;
         }
 
-        @keyframes heartbeat {
-            0% { transform: scale(0.8); opacity: 0.5; box-shadow: 0 0 0px rgba(0, 168, 255, 0); }
-            30% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 40px rgba(0, 168, 255, 0.8); }
-            100% { transform: scale(0.8); opacity: 0.5; box-shadow: 0 0 0px rgba(0, 168, 255, 0); }
+        @keyframes spin { 
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes spin-reverse {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.8; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes line-grow {
+            0%, 100% { width: 0; opacity: 0; }
+            50% { width: 150px; opacity: 1; }
         }
 
-        /* Khi load xong sẽ thêm class này bằng JS */
         .loader-hidden {
             opacity: 0;
             visibility: hidden;
+            transform: translateY(-100%);
         }
 
-        /* --- 1. GLOBAL VARIABLES & RESET (Giữ nguyên của bạn) --- */
+        /* --- 1. GLOBAL VARIABLES & RESET --- */
         :root {
             --primary-blue: #00a8ff;
             --deep-blue: #0056b3;
@@ -114,7 +138,8 @@
         ul { list-style: none; }
 
         header {
-            position: fixed; top: 0; width: 100%; z-index: 1000;
+            position: fixed;
+            top: 0; width: 100%; z-index: 1000;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(0,0,0,0.05);
@@ -125,7 +150,8 @@
         .nav-flex { display: flex; justify-content: space-between; align-items: center; }
 
         .logo {
-            font-size: 28px; font-weight: 800; letter-spacing: -1px;
+            font-size: 28px;
+            font-weight: 800; letter-spacing: -1px;
             color: var(--deep-blue); display: flex; align-items: center; gap: 8px;
         }
         .logo span { color: var(--primary-blue); }
@@ -135,7 +161,8 @@
         .nav-menu a:hover { color: var(--primary-blue); }
 
         .btn-quote {
-            padding: 12px 30px; background: var(--gradient); color: #fff;
+            padding: 12px 30px;
+            background: var(--gradient); color: #fff;
             border-radius: 6px; font-weight: 600; font-size: 14px;
             box-shadow: 0 5px 15px rgba(0, 168, 255, 0.3);
         }
@@ -150,7 +177,8 @@
         .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
 
         .hero-content h1 {
-            font-size: 3.5rem; line-height: 1.2; font-weight: 800; margin-bottom: 20px;
+            font-size: 3.5rem;
+            line-height: 1.2; font-weight: 800; margin-bottom: 20px;
             background: linear-gradient(to right, #1e272e, #00a8ff);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
@@ -158,19 +186,30 @@
         .hero-content p { font-size: 1.1rem; color: var(--text-gray); margin-bottom: 40px; max-width: 500px; }
         
         .stats-bar {
-            display: flex; gap: 40px; padding-top: 30px; border-top: 1px solid #eee;
+            display: flex;
+            gap: 40px; padding-top: 30px; border-top: 1px solid #eee;
         }
         .stat-item h3 { font-size: 2rem; color: var(--deep-blue); font-weight: 800; }
         .stat-item p { font-size: 0.9rem; color: var(--text-gray); }
 
         .hero-img { position: relative; }
-        .hero-img img { width: 100%; border-radius: 20px; box-shadow: var(--shadow); }
+        .hero-img img { 
+            width: 100%; 
+            height: 500px; 
+            object-fit: cover; 
+            border-radius: 24px; 
+            box-shadow: var(--shadow);
+            border: 8px solid #fff;
+        }
         
         .badge-exp {
-            position: absolute; bottom: -20px; left: -20px;
-            background: #fff; padding: 20px; border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 15px;
+            position: absolute;
+            bottom: -30px; left: -20px;
+            background: #fff; padding: 25px; border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12); display: flex; align-items: center;
+            gap: 15px;
             z-index: 5;
+            border-left: 5px solid var(--primary-blue);
         }
         .badge-icon { width: 50px; height: 50px; background: #e3f2fd; color: var(--primary-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
 
@@ -187,16 +226,29 @@
 
         .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
         .vision-card {
-            padding: 40px; background: #fff; border: 1px solid #eee; border-radius: 12px;
+            padding: 40px;
+            background: #fff; border: 1px solid #eee; border-radius: 12px;
             transition: 0.3s;
         }
         .vision-card:hover { border-color: var(--primary-blue); transform: translateY(-10px); box-shadow: var(--shadow); }
         .v-icon { font-size: 40px; color: var(--primary-blue); margin-bottom: 20px; }
         .vision-card h3 { margin-bottom: 15px; font-size: 1.2rem; }
 
+        .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+        .story-content h3 { color: var(--deep-blue); margin-top: 25px; margin-bottom: 15px; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; }
+        .story-content h3 i { color: var(--primary-blue); font-size: 20px; }
+        .story-content p { color: var(--text-gray); margin-bottom: 15px; text-align: justify; }
+        .story-content ul { margin-bottom: 20px; }
+        .story-content ul li { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; color: var(--text-gray); font-weight: 500; }
+        .story-content ul li i { color: var(--primary-blue); }
+        .story-image-wrap { position: relative; }
+        .story-image-wrap img { width: 100%; border-radius: 20px; box-shadow: var(--shadow); }
+        .story-quote { background: var(--bg-light); padding: 30px; border-left: 5px solid var(--primary-blue); border-radius: 0 15px 15px 0; margin-top: 30px; font-style: italic; font-weight: 600; color: var(--tech-dark); }
+
         .service-bg { background: #1e272e; color: #fff; position: relative; overflow: hidden; }
         .service-bg::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            content: '';
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: url('https://www.transparenttextures.com/patterns/cubes.png'); opacity: 0.1;
         }
         
@@ -222,18 +274,13 @@
         .step-item:hover .step-num { background: var(--primary-blue); color: #fff; }
         
         .price-table { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .price-col {
-            background: #fff; padding: 50px 30px; border-radius: 15px; border: 1px solid #eee; text-align: center;
-            transition: 0.3s;
-        }
+        .price-col { background: #fff; padding: 50px 30px; border-radius: 15px; border: 1px solid #eee; text-align: center; transition: 0.3s; }
         .price-col.active { border: 2px solid var(--primary-blue); box-shadow: var(--shadow); transform: scale(1.05); }
         .price-tag { font-size: 40px; color: var(--deep-blue); font-weight: 800; margin: 20px 0; }
         .feature-list li { margin: 15px 0; color: var(--text-gray); font-size: 15px; }
         .feature-list i { color: #2ecc71; margin-right: 8px; }
 
-        .cta-section {
-            background: var(--gradient); color: #fff; text-align: center; padding: 80px 0; border-radius: 20px;
-        }
+        .cta-section { background: var(--gradient); color: #fff; text-align: center; padding: 80px 0; border-radius: 20px; }
         
         footer { background: var(--tech-dark); color: #fff; padding: 70px 0 20px; font-size: 14px; }
         .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 50px; }
@@ -243,128 +290,62 @@
         .footer-col a:hover { color: var(--primary-blue); }
 
         @media (max-width: 768px) {
-            .hero-grid, .about-grid, .price-table, .process-steps, .footer-grid { grid-template-columns: 1fr; }
+            .hero-grid, .about-grid, .price-table, .process-steps, .footer-grid, .story-grid { grid-template-columns: 1fr; }
             .nav-menu { display: none; }
             .hero-content h1 { font-size: 2.5rem; }
+            .hero-img img { height: auto; }
             .price-col.active { transform: scale(1); }
         }
+
+        /* LIÊN HỆ GÓC PHẢI */
+        .fixed-contact {
+            position: fixed; bottom: 30px; right: 20px; z-index: 9999;
+            display: flex; flex-direction: column; gap: 15px;
+        }
+        .contact-btn {
+            width: 55px; height: 55px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            color: #fff; font-size: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease; position: relative;
+        }
+        .contact-btn:hover { transform: scale(1.1); }
+        .contact-btn.zalo { background: #0084FF; }
+        .contact-btn.phone { background: #2ecc71; animation: phone-shake 1.5s infinite; }
+
+        @keyframes phone-shake {
+            0%, 100% { transform: rotate(0); }
+            10%, 30% { transform: rotate(-15deg); }
+            20%, 40% { transform: rotate(15deg); }
+        }
+
+        /* POPUP QUẢNG CÁO */
+        .popup-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); display: none; justify-content: center;
+            align-items: center; z-index: 100000; backdrop-filter: blur(5px);
+        }
+        .popup-content {
+            background: #fff; width: 90%; max-width: 450px; padding: 40px;
+            border-radius: 20px; position: relative; text-align: center;
+            animation: popup-zoom 0.5s ease-out;
+        }
+        @keyframes popup-zoom { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .popup-close { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: #ccc; }
+        .popup-badge { background: var(--primary-blue); color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 15px; display: inline-block; }
+        .popup-btn { display: block; background: var(--gradient); color: #fff; padding: 15px; border-radius: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
 <body>
-<style>
-        /* 1. CSS CHO NÚT LIÊN HỆ GÓC PHẢI */
-        .fixed-contact {
-            position: fixed;
-            bottom: 30px;
-            right: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .contact-btn {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
-            font-size: 24px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .contact-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .contact-btn.zalo {
-            background: #0084FF;
-        }
-
-        .contact-btn.phone {
-            background: #2ecc71;
-            animation: phone-shake 1.5s infinite;
-        }
-
-        @keyframes phone-shake {
-            0% { transform: rotate(0); }
-            10% { transform: rotate(-15deg); }
-            20% { transform: rotate(15deg); }
-            30% { transform: rotate(-15deg); }
-            40% { transform: rotate(15deg); }
-            50% { transform: rotate(0); }
-            100% { transform: rotate(0); }
-        }
-
-        /* 2. CSS CHO POPUP QUẢNG CÁO */
-        .popup-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: none; /* Ẩn mặc định */
-            justify-content: center;
-            align-items: center;
-            z-index: 100000;
-            backdrop-filter: blur(5px);
-        }
-
-        .popup-content {
-            background: #fff;
-            width: 90%;
-            max-width: 450px;
-            padding: 40px;
-            border-radius: 20px;
-            position: relative;
-            text-align: center;
-            animation: popup-zoom 0.5s ease-out;
-        }
-
-        @keyframes popup-zoom {
-            from { transform: scale(0.7); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .popup-close {
-            position: absolute;
-            top: 15px; right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #ccc;
-            transition: 0.3s;
-        }
-
-        .popup-close:hover { color: var(--tech-dark); }
-
-        .popup-badge {
-            background: var(--primary-blue);
-            color: #fff;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            display: inline-block;
-        }
-
-        .popup-content h3 { font-size: 28px; margin-bottom: 10px; color: var(--tech-dark); }
-        .popup-content p { color: var(--text-gray); margin-bottom: 25px; }
-        
-        .popup-btn {
-            display: block;
-            background: var(--gradient);
-            color: #fff;
-            padding: 15px;
-            border-radius: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-    </style>
+    <div id="preloader">
+        <div class="loader-wrapper">
+            <div class="energy-ring"></div>
+            <div class="loader-brand">
+                <h2>L-TECH</h2>
+                <div class="loader-line"></div>
+            </div>
+            <div class="loader-status">System Loading...</div>
+        </div>
+    </div>
 
     <div class="fixed-contact">
         <a href="https://zalo.me/0347285304" target="_blank" class="contact-btn zalo" title="Chat Zalo">
@@ -385,38 +366,6 @@
         </div>
     </div>
 
-    <script>
-        // Hiển thị popup sau 3 giây khi trang web load xong
-        window.addEventListener("load", function() {
-            setTimeout(() => {
-                document.getElementById("promoPopup").style.display = "flex";
-            }, 3000); 
-        });
-
-        // Hàm đóng popup
-        function closePopup() {
-            document.getElementById("promoPopup").style.display = "none";
-        }
-
-        // Đóng khi click ra ngoài vùng popup
-        window.onclick = function(event) {
-            let overlay = document.getElementById("promoPopup");
-            if (event.target == overlay) {
-                overlay.style.display = "none";
-            }
-        }
-    </script>
-    <div id="preloader">
-        <div class="loader-content">
-            <div class="heartbeat-circle"></div>
-            <div class="heartbeat-circle"></div>
-            <div class="loader-text">
-                <h2>L-TECH</h2>
-                <p>Trần Hữu Luân</p>
-            </div>
-        </div>
-    </div>
-
     <header>
         <div class="container nav-flex">
             <div class="logo">
@@ -424,6 +373,7 @@
             </div>
             <nav class="nav-menu">
                 <a href="#about">Về L-Tech</a>
+                <a href="#story">Câu Chuyện</a>
                 <a href="#services">Giải Pháp</a>
                 <a href="#process">Quy Trình</a>
                 <a href="#pricing">Bảng Giá</a>
@@ -448,27 +398,20 @@
                 </div>
 
                 <div class="stats-bar">
-                    <div class="stat-item">
-                        <h3>5+</h3>
-                        <p>Năm Kinh Nghiệm</p>
-                    </div>
-                    <div class="stat-item">
-                        <h3>100%</h3>
-                        <p>Hài Lòng</p>
-                    </div>
-                    <div class="stat-item">
-                        <h3>24/7</h3>
-                        <p>Hỗ Trợ Kỹ Thuật</p>
-                    </div>
+                    <div class="stat-item"> <h3>5+</h3> <p>Năm Kinh Nghiệm</p> </div>
+                    <div class="stat-item"> <h3>100%</h3> <p>Hài Lòng</p> </div>
+                    <div class="stat-item"> <h3>24/7</h3> <p>Hỗ Trợ Kỹ Thuật</p> </div>
                 </div>
             </div>
 
             <div class="hero-img" data-aos="fade-left">
-            
+                <img src="https://sf-static.upanhlaylink.com/img/image_2026010794e9e687ce5096274fb1ce680886330d.jpg" alt="Founder Trần Hữu Luân">
+                
                 <div class="badge-exp">
                     <div class="badge-icon"><i class="fas fa-check-circle"></i></div>
                     <div>
-                        <h4 style="font-size: 15px; font-weight: 700;">"L-Tech không chỉ là một đơn vị code web. Chúng tôi được dẫn dắt bởi Founder Trần Hữu Luân – người đã xây dựng hệ thống quản lý thư viện online toàn quốc từ khi còn là học sinh lớp 10. Tại L-Tech, chúng tôi mang tư duy hệ thống quy mô lớn áp dụng vào từng dự án nhỏ nhất của bạn."</h4>
+                        <h4 style="font-size: 16px; font-weight: 800; color: var(--tech-dark);">Dẫn dắt bởi Founder Trần Hữu Luân</h4>
+                        <p style="font-size: 13px; color: var(--primary-blue); font-weight: 600; margin-top: 4px;">Tư duy hệ thống quốc gia cho dự án của bạn</p>
                     </div>
                 </div>
             </div>
@@ -495,7 +438,6 @@
                 <h2>Giá Trị Cốt Lõi Của L-TECH</h2>
                 <p style="color: #666; max-width: 600px; margin: 10px auto;">Chúng tôi không chỉ viết mã, chúng tôi xây dựng nền tảng cho sự thành công của bạn.</p>
             </div>
-            
             <div class="about-grid">
                 <div class="vision-card" data-aos="fade-up" data-aos-delay="100">
                     <i class="fas fa-eye v-icon"></i>
@@ -516,13 +458,49 @@
         </div>
     </section>
 
+    <section id="story" class="section-padding" style="background: #fff; border-top: 1px solid #eee;">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span>Câu chuyện về thương hiệu</span>
+                <h2>TỪ CẬU HỌC TRÒ LỚP 10 ĐẾN GIẤC MƠ SỐ HÓA VIỆT NAM</h2>
+            </div>
+            <div class="story-grid">
+                <div class="story-content" data-aos="fade-right">
+                    <h3><i class="fas fa-fire"></i> Khởi nguồn từ đam mê</h3>
+                    <p>Câu chuyện của L-TECH không bắt đầu trong một tòa cao ốc văn phòng hào nhoáng, mà nhen nhóm từ một góc học tập nhỏ, nơi tiếng gõ phím lạch cạch vang lên mỗi đêm muộn.</p>
+                    <p>Đó là những năm tháng cấp 3, khi bạn bè đồng trang lứa còn mải mê với những kỳ thi, thì Trần Hữu Luân - cậu học sinh lớp 10 đã trăn trở với một bài toán lớn hơn: Làm sao để công nghệ giúp cuộc sống trở nên dễ dàng hơn? Chính trăn trở ấy đã thôi thúc Luân tự mày mò, viết nên những dòng code đầu tiên và xây dựng thành công Hệ thống quản lý thư viện Online toàn quốc.</p>
+                    
+                    <h3><i class="fas fa-code"></i> L-TECH: Hơn cả những dòng Code</h3>
+                    <p>Tại L-TECH, mỗi dự án – dù là một Landing Page khởi nghiệp hay một hệ thống SaaS phức tạp – đều được thổi vào đó tư duy của một hệ thống quy mô lớn. Chúng tôi hiểu rằng, đằng sau mỗi website doanh nghiệp là mồ hôi công sức của người chủ, đằng sau mỗi ứng dụng là khát vọng vươn mình ra biển lớn.</p>
+                    
+                    <h3><i class="fas fa-heart"></i> Sứ mệnh của sự tử tế và tận tâm</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Chúng tôi không bán một website xong rồi thôi.</li>
+                        <li><i class="fas fa-check-circle"></i> Chúng tôi trao cho bạn một giải pháp để an tâm vận hành.</li>
+                        <li><i class="fas fa-check-circle"></i> Cam kết đồng hành 24/7 như một người cộng sự trung thành.</li>
+                    </ul>
+
+                    <div class="story-quote">
+                        "L-TECH vẫn giữ nguyên vẹn ngọn lửa đam mê như ngày đầu chàng trai trẻ Trần Hữu Luân bắt đầu hành trình. Chúng tôi dùng những dòng code sạch nhất, bảo mật nhất để viết tiếp câu chuyện thành công của chính bạn."
+                    </div>
+                </div>
+                <div class="story-image-wrap" data-aos="fade-left">
+                    <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1000&auto=format&fit=crop" alt="Founder Journey">
+                    <div style="margin-top: 20px;">
+                        <h3><i class="fas fa-rocket"></i> Lời hứa tương lai</h3>
+                        <p>Với tầm nhìn vươn ra thị trường Âu-Mỹ và khát vọng lọt Top 10 công ty chuyển đổi số vào năm 2030, L-TECH cam kết mang lại giá trị thực chất và sự bền vững cho mọi đối tác.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="services" class="section-padding service-bg">
         <div class="container">
             <div class="section-header" style="color: #fff;" data-aos="fade-up">
                 <span style="color: var(--primary-blue);">Lĩnh Vực Hoạt Động</span>
                 <h2 style="color: #fff;">Hệ Sinh Thái Dịch Vụ</h2>
             </div>
-
             <div class="services-grid">
                 <div class="service-box" data-aos="zoom-in" data-aos-delay="100">
                     <i class="fas fa-laptop-code" style="font-size: 40px; color: var(--primary-blue); margin-bottom: 20px;"></i>
@@ -564,7 +542,6 @@
                 <span>Quy Trình Làm Việc</span>
                 <h2>4 Bước Chuẩn Quốc Tế</h2>
             </div>
-            
             <div class="process-steps">
                 <div class="step-item" data-aos="fade-up" data-aos-delay="100">
                     <div class="step-num">01</div>
@@ -596,7 +573,6 @@
                 <span>Đầu Tư Thông Minh</span>
                 <h2>Bảng Giá Dịch Vụ</h2>
             </div>
-            
             <div class="price-table">
                 <div class="price-col" data-aos="flip-left">
                     <h4>START-UP</h4>
@@ -615,7 +591,7 @@
                     <h4>BUSINESS</h4>
                     <div class="price-tag" style="color: var(--primary-blue);">7.500K</div>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check"></i> <strong>Website Đa Trang (Full)</strong></li>
+                        <li><i class="fas fa-check"></i> <strong>Website Đa Trang Full</strong></li>
                         <li><i class="fas fa-check"></i> <strong>Chuẩn SEO Google 100%</strong></li>
                         <li><i class="fas fa-check"></i> Tích hợp Chat/Zalo/Form</li>
                         <li><i class="fas fa-check"></i> CMS Quản trị dễ dùng</li>
@@ -697,14 +673,31 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // XỬ LÝ ẨN LOADING KHI LOAD XONG
+        // Xử lý Preloader và Popup
         window.addEventListener("load", function() {
             const preloader = document.getElementById("preloader");
-            // Cho chạy thêm 1 giây để khách hàng kịp thấy hiệu ứng đẹp
+            
+            // Ẩn preloader sau 1.5s để tạo hiệu ứng chuyên nghiệp
             setTimeout(() => {
                 preloader.classList.add("loader-hidden");
-            }, 1000);
+                
+                // Hiện popup sau khi loading xong 2s
+                setTimeout(() => {
+                    document.getElementById("promoPopup").style.display = "flex";
+                }, 2000);
+            }, 1500);
         });
+
+        function closePopup() {
+            document.getElementById("promoPopup").style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            let overlay = document.getElementById("promoPopup");
+            if (event.target == overlay) {
+                overlay.style.display = "none";
+            }
+        }
 
         AOS.init({
             duration: 1000,
