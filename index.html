@@ -11,105 +11,108 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
-        /* --- 0. PRELOADER CAO CẤP (CYBER TECH SCAN) --- */
+        /* --- 0. PRELOADER CAO CẤP (NEW VERSION: LUNG LINH & HIỆN ĐẠI) --- */
         #preloader {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-color: #0a0e12; 
+            background: radial-gradient(circle at center, #0a0e12 0%, #000000 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 99999;
-            transition: all 1s cubic-bezier(0.7, 0, 0.3, 1);
+            transition: all 0.8s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
         .loader-wrapper {
             position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Vòng tròn năng lượng xoay */
-        .energy-ring {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            border: 2px solid rgba(0, 168, 255, 0.1);
-            border-top: 3px solid #00a8ff;
-            border-bottom: 3px solid #00a8ff;
-            position: absolute;
-            animation: spin 2s linear infinite;
-            box-shadow: 0 0 30px rgba(0, 168, 255, 0.3);
-        }
-
-        .energy-ring::before {
-            content: '';
-            position: absolute;
-            top: 10px; left: 10px; right: 10px; bottom: 10px;
-            border-radius: 50%;
-            border: 2px solid rgba(0, 168, 255, 0.1);
-            border-left: 3px solid #00d2ff;
-            border-right: 3px solid #00d2ff;
-            animation: spin-reverse 1.5s linear infinite;
-        }
-
-        /* Chữ L-TECH phát sáng */
-        .loader-brand {
-            z-index: 10;
             text-align: center;
         }
 
-        .loader-brand h2 {
-            font-size: 32px;
+        /* Hiệu ứng hạt sáng bay xung quanh */
+        .particles {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px; height: 300px;
+        }
+        .particle {
+            position: absolute;
+            background: #00a8ff;
+            border-radius: 50%;
+            opacity: 0.3;
+            filter: blur(2px);
+            animation: float 3s infinite ease-in-out;
+        }
+
+        /* Chữ L-TECH TRẦN HỮU LUÂN lung linh */
+        .loader-brand-new {
+            position: relative;
+            z-index: 10;
+        }
+
+        .loader-brand-new h2 {
+            font-size: 38px;
             font-weight: 900;
             margin: 0;
-            letter-spacing: 8px;
-            color: #fff;
-            text-shadow: 0 0 15px rgba(0, 168, 255, 0.8), 0 0 30px rgba(0, 168, 255, 0.4);
-            animation: pulse-glow 2s ease-in-out infinite;
-        }
-
-        .loader-line {
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #00a8ff, transparent);
-            margin-top: 10px;
-            animation: line-grow 2s ease-in-out infinite;
-        }
-
-        .loader-status {
-            margin-top: 40px;
-            font-size: 10px;
+            letter-spacing: 5px;
+            background: linear-gradient(90deg, #fff, #00a8ff, #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine-text 3s linear infinite;
             text-transform: uppercase;
-            letter-spacing: 4px;
-            color: #00a8ff;
-            opacity: 0.8;
-            font-weight: 600;
         }
 
-        @keyframes spin { 
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .loader-brand-new p {
+            color: #00a8ff;
+            font-size: 12px;
+            letter-spacing: 10px;
+            margin-top: 15px;
+            text-transform: uppercase;
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards 0.5s;
         }
-        @keyframes spin-reverse {
-            0% { transform: rotate(360deg); }
-            100% { transform: rotate(0deg); }
+
+        /* Thanh progress bar mượt mà */
+        .loader-progress-container {
+            width: 250px;
+            height: 2px;
+            background: rgba(255,255,255,0.05);
+            margin: 30px auto 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
         }
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.8; transform: scale(0.95); }
-            50% { opacity: 1; transform: scale(1); }
+        .loader-progress-bar {
+            position: absolute;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #00a8ff, transparent);
+            animation: progress-move 2s infinite;
         }
-        @keyframes line-grow {
-            0%, 100% { width: 0; opacity: 0; }
-            50% { width: 150px; opacity: 1; }
+
+        @keyframes shine-text {
+            to { background-position: 200% center; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); opacity: 0.3; }
+            50% { transform: translate(10px, -20px); opacity: 0.6; }
+        }
+        @keyframes progress-move {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .loader-hidden {
             opacity: 0;
             visibility: hidden;
-            transform: translateY(-100%);
+            transform: scale(1.1);
         }
 
         /* --- 1. GLOBAL VARIABLES & RESET --- */
@@ -165,9 +168,11 @@
             background: var(--gradient); color: #fff;
             border-radius: 6px; font-weight: 600; font-size: 14px;
             box-shadow: 0 5px 15px rgba(0, 168, 255, 0.3);
+            cursor: pointer;
         }
         .btn-quote:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 168, 255, 0.4); }
 
+        /* --- HERO SECTION CẬP NHẬT ẢNH --- */
         .hero {
             padding: 160px 0 100px;
             background: radial-gradient(circle at top right, rgba(0, 168, 255, 0.05), transparent);
@@ -192,31 +197,35 @@
         .stat-item h3 { font-size: 2rem; color: var(--deep-blue); font-weight: 800; }
         .stat-item p { font-size: 0.9rem; color: var(--text-gray); }
 
-        .hero-img { position: relative; }
+        /* Style mới cho ảnh Founder: Hiển thị Full không bị cắt */
+        .hero-img { 
+            position: relative; 
+            height: 600px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
         .hero-img img { 
-            width: 100%; 
-            height: 500px; 
-            object-fit: cover; 
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Đảm bảo không bị cắt, thấy rõ hết thân hình */
             border-radius: 24px; 
-            box-shadow: var(--shadow);
-            border: 8px solid #fff;
+            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.1));
         }
         
         .badge-exp {
             position: absolute;
-            bottom: -30px; left: -20px;
+            bottom: 10px; left: -20px;
             background: #fff; padding: 25px; border-radius: 16px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.12); display: flex; align-items: center;
-            gap: 15px;
-            z-index: 5;
-            border-left: 5px solid var(--primary-blue);
+            gap: 15px; z-index: 5; border-left: 5px solid var(--primary-blue);
         }
         .badge-icon { width: 50px; height: 50px; background: #e3f2fd; color: var(--primary-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
 
+        /* --- CÁC PHẦN KHÁC GIỮ NGUYÊN --- */
         .tech-stack { padding: 50px 0; background: var(--bg-light); overflow: hidden; }
         .tech-slide { display: flex; gap: 50px; animation: slide 20s linear infinite; white-space: nowrap; }
         .tech-item { font-size: 24px; font-weight: 700; color: #cbd5e0; display: flex; align-items: center; gap: 10px; }
-        
         @keyframes slide { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
         .section-padding { padding: 100px 0; }
@@ -225,11 +234,7 @@
         .section-header h2 { font-size: 2.5rem; margin-top: 10px; font-weight: 800; }
 
         .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .vision-card {
-            padding: 40px;
-            background: #fff; border: 1px solid #eee; border-radius: 12px;
-            transition: 0.3s;
-        }
+        .vision-card { padding: 40px; background: #fff; border: 1px solid #eee; border-radius: 12px; transition: 0.3s; }
         .vision-card:hover { border-color: var(--primary-blue); transform: translateY(-10px); box-shadow: var(--shadow); }
         .v-icon { font-size: 40px; color: var(--primary-blue); margin-bottom: 20px; }
         .vision-card h3 { margin-bottom: 15px; font-size: 1.2rem; }
@@ -246,18 +251,9 @@
         .story-quote { background: var(--bg-light); padding: 30px; border-left: 5px solid var(--primary-blue); border-radius: 0 15px 15px 0; margin-top: 30px; font-style: italic; font-weight: 600; color: var(--tech-dark); }
 
         .service-bg { background: #1e272e; color: #fff; position: relative; overflow: hidden; }
-        .service-bg::before {
-            content: '';
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/cubes.png'); opacity: 0.1;
-        }
-        
+        .service-bg::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://www.transparenttextures.com/patterns/cubes.png'); opacity: 0.1; }
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; position: relative; z-index: 1; }
-        .service-box {
-            background: rgba(255,255,255,0.05); backdrop-filter: blur(10px);
-            padding: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
-            transition: 0.3s;
-        }
+        .service-box { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
         .service-box:hover { background: var(--primary-blue); border-color: var(--primary-blue); }
         .service-box h3 { font-size: 1.5rem; margin: 20px 0 10px; }
         .service-box p { color: #a4b0be; font-size: 0.95rem; }
@@ -265,12 +261,7 @@
 
         .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center; position: relative; }
         .step-item { position: relative; z-index: 2; }
-        .step-num {
-            width: 60px; height: 60px; background: var(--bg-light); color: var(--tech-dark);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 20px; margin: 0 auto 20px; border: 2px solid var(--primary-blue);
-            transition: 0.3s;
-        }
+        .step-num { width: 60px; height: 60px; background: var(--bg-light); color: var(--tech-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; margin: 0 auto 20px; border: 2px solid var(--primary-blue); transition: 0.3s; }
         .step-item:hover .step-num { background: var(--primary-blue); color: #fff; }
         
         .price-table { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
@@ -281,7 +272,6 @@
         .feature-list i { color: #2ecc71; margin-right: 8px; }
 
         .cta-section { background: var(--gradient); color: #fff; text-align: center; padding: 80px 0; border-radius: 20px; }
-        
         footer { background: var(--tech-dark); color: #fff; padding: 70px 0 20px; font-size: 14px; }
         .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 50px; }
         .footer-col h4 { color: #fff; margin-bottom: 20px; font-size: 16px; }
@@ -293,42 +283,22 @@
             .hero-grid, .about-grid, .price-table, .process-steps, .footer-grid, .story-grid { grid-template-columns: 1fr; }
             .nav-menu { display: none; }
             .hero-content h1 { font-size: 2.5rem; }
+            .hero-img { height: auto; }
             .hero-img img { height: auto; }
             .price-col.active { transform: scale(1); }
         }
 
         /* LIÊN HỆ GÓC PHẢI */
-        .fixed-contact {
-            position: fixed; bottom: 30px; right: 20px; z-index: 9999;
-            display: flex; flex-direction: column; gap: 15px;
-        }
-        .contact-btn {
-            width: 55px; height: 55px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            color: #fff; font-size: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease; position: relative;
-        }
+        .fixed-contact { position: fixed; bottom: 30px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 15px; }
+        .contact-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #fff; font-size: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s ease; position: relative; }
         .contact-btn:hover { transform: scale(1.1); }
         .contact-btn.zalo { background: #0084FF; }
         .contact-btn.phone { background: #2ecc71; animation: phone-shake 1.5s infinite; }
+        @keyframes phone-shake { 0%, 100% { transform: rotate(0); } 10%, 30% { transform: rotate(-15deg); } 20%, 40% { transform: rotate(15deg); } }
 
-        @keyframes phone-shake {
-            0%, 100% { transform: rotate(0); }
-            10%, 30% { transform: rotate(-15deg); }
-            20%, 40% { transform: rotate(15deg); }
-        }
-
-        /* POPUP QUẢNG CÁO */
-        .popup-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); display: none; justify-content: center;
-            align-items: center; z-index: 100000; backdrop-filter: blur(5px);
-        }
-        .popup-content {
-            background: #fff; width: 90%; max-width: 450px; padding: 40px;
-            border-radius: 20px; position: relative; text-align: center;
-            animation: popup-zoom 0.5s ease-out;
-        }
+        /* POPUP */
+        .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 100000; backdrop-filter: blur(5px); }
+        .popup-content { background: #fff; width: 90%; max-width: 450px; padding: 40px; border-radius: 20px; position: relative; text-align: center; animation: popup-zoom 0.5s ease-out; }
         @keyframes popup-zoom { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .popup-close { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: #ccc; }
         .popup-badge { background: var(--primary-blue); color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 15px; display: inline-block; }
@@ -337,13 +307,16 @@
 </head>
 <body>
     <div id="preloader">
+        <div class="particles" id="particle-container"></div>
         <div class="loader-wrapper">
-            <div class="energy-ring"></div>
-            <div class="loader-brand">
+            <div class="loader-brand-new">
                 <h2>L-TECH</h2>
-                <div class="loader-line"></div>
+                <p>Trần Hữu Luân</p>
             </div>
-            <div class="loader-status">System Loading...</div>
+            <div class="loader-progress-container">
+                <div class="loader-progress-bar"></div>
+            </div>
+            <div style="color: rgba(255,255,255,0.4); font-size: 10px; margin-top: 20px; letter-spacing: 2px;">SYSTEM INITIALIZING...</div>
         </div>
     </div>
 
@@ -405,7 +378,7 @@
             </div>
 
             <div class="hero-img" data-aos="fade-left">
-                <img src="https://sf-static.upanhlaylink.com/img/image_2026010794e9e687ce5096274fb1ce680886330d.jpg" alt="Founder Trần Hữu Luân">
+                <img src="https://sf-static.upanhlaylink.com/img/image_2026010857e0eb40b9dd835920ca97bf5727d416.jpg" alt="Founder Trần Hữu Luân">
                 
                 <div class="badge-exp">
                     <div class="badge-icon"><i class="fas fa-check-circle"></i></div>
@@ -468,10 +441,11 @@
                 <div class="story-content" data-aos="fade-right">
                     <h3><i class="fas fa-fire"></i> Khởi nguồn từ đam mê</h3>
                     <p>Câu chuyện của L-TECH không bắt đầu trong một tòa cao ốc văn phòng hào nhoáng, mà nhen nhóm từ một góc học tập nhỏ, nơi tiếng gõ phím lạch cạch vang lên mỗi đêm muộn.</p>
-                    <p>Đó là những năm tháng cấp 3, khi bạn bè đồng trang lứa còn mải mê với những kỳ thi, thì Trần Hữu Luân - cậu học sinh lớp 10 đã trăn trở với một bài toán lớn hơn: Làm sao để công nghệ giúp cuộc sống trở nên dễ dàng hơn? Chính trăn trở ấy đã thôi thúc Luân tự mày mò, viết nên những dòng code đầu tiên và xây dựng thành công Hệ thống quản lý thư viện Online toàn quốc.</p>
+                    <p>Đó là những năm tháng cấp 3, khi bạn bè đồng trang lứa còn mải mê với những kỳ thi, thì Trần Hữu Luân, cậu học sinh lớp 10 đã trăn trở với một bài toán lớn hơn: Làm sao để công nghệ giúp cuộc sống trở nên dễ dàng hơn?</p>
+                    <p>Chính trăn trở ấy đã thôi thúc Luân tự mày mò, viết nên những dòng code đầu tiên và xây dựng thành công Hệ thống quản lý thư viện Online toàn quốc.</p>
                     
                     <h3><i class="fas fa-code"></i> L-TECH: Hơn cả những dòng Code</h3>
-                    <p>Tại L-TECH, mỗi dự án – dù là một Landing Page khởi nghiệp hay một hệ thống SaaS phức tạp – đều được thổi vào đó tư duy của một hệ thống quy mô lớn. Chúng tôi hiểu rằng, đằng sau mỗi website doanh nghiệp là mồ hôi công sức của người chủ, đằng sau mỗi ứng dụng là khát vọng vươn mình ra biển lớn.</p>
+                    <p>Tại L-TECH, mỗi dự án, dù là một Landing Page khởi nghiệp hay một hệ thống SaaS phức tạp, đều được thổi vào đó tư duy của một hệ thống quy mô lớn.</p>
                     
                     <h3><i class="fas fa-heart"></i> Sứ mệnh của sự tử tế và tận tâm</h3>
                     <ul>
@@ -673,19 +647,31 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        // Tạo hiệu ứng hạt phân tử cho Preloader
+        const container = document.getElementById('particle-container');
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const size = Math.random() * 5 + 2 + 'px';
+            particle.style.width = size;
+            particle.style.height = size;
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            container.appendChild(particle);
+        }
+
         // Xử lý Preloader và Popup
         window.addEventListener("load", function() {
             const preloader = document.getElementById("preloader");
             
-            // Ẩn preloader sau 1.5s để tạo hiệu ứng chuyên nghiệp
             setTimeout(() => {
                 preloader.classList.add("loader-hidden");
                 
-                // Hiện popup sau khi loading xong 2s
                 setTimeout(() => {
                     document.getElementById("promoPopup").style.display = "flex";
                 }, 2000);
-            }, 1500);
+            }, 2500); // Tăng thời gian load để khách chiêm ngưỡng hiệu ứng lung linh
         });
 
         function closePopup() {
