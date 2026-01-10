@@ -11,7 +11,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
-        /* --- 0. PRELOADER CAO CẤP (NEW VERSION: LUNG LINH & HIỆN ĐẠI) --- */
+        /* --- 0. PRELOADER CAO CẤP (NEW VERSION) --- */
         #preloader {
             position: fixed;
             top: 0; left: 0;
@@ -125,6 +125,8 @@
             --bg-light: #f4f7f6;
             --gradient: linear-gradient(135deg, #00a8ff 0%, #0097e6 100%);
             --shadow: 0 10px 40px rgba(0, 168, 255, 0.15);
+            --chat-bg: #ffffff;
+            --chat-header-bg: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -135,6 +137,7 @@
             background-color: var(--bg-white);
             overflow-x: hidden;
             line-height: 1.6;
+            scroll-behavior: smooth;
         }
 
         a { text-decoration: none; color: inherit; transition: 0.3s; }
@@ -169,10 +172,11 @@
             border-radius: 6px; font-weight: 600; font-size: 14px;
             box-shadow: 0 5px 15px rgba(0, 168, 255, 0.3);
             cursor: pointer;
+            border: none;
         }
         .btn-quote:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 168, 255, 0.4); }
 
-        /* --- HERO SECTION CẬP NHẬT ẢNH --- */
+        /* --- HERO SECTION --- */
         .hero {
             padding: 160px 0 100px;
             background: radial-gradient(circle at top right, rgba(0, 168, 255, 0.05), transparent);
@@ -197,9 +201,8 @@
         .stat-item h3 { font-size: 2rem; color: var(--deep-blue); font-weight: 800; }
         .stat-item p { font-size: 0.9rem; color: var(--text-gray); }
 
-        /* Style mới cho ảnh Founder: Hiển thị Full không bị cắt */
         .hero-img { 
-            position: relative; 
+            position: relative;
             height: 600px; 
             display: flex; 
             align-items: center; 
@@ -208,8 +211,8 @@
         .hero-img img { 
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Đảm bảo không bị cắt, thấy rõ hết thân hình */
-            border-radius: 24px; 
+            object-fit: contain;
+            border-radius: 24px;
             filter: drop-shadow(0 20px 50px rgba(0,0,0,0.1));
         }
         
@@ -220,9 +223,12 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.12); display: flex; align-items: center;
             gap: 15px; z-index: 5; border-left: 5px solid var(--primary-blue);
         }
-        .badge-icon { width: 50px; height: 50px; background: #e3f2fd; color: var(--primary-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .badge-icon { 
+            width: 50px; height: 50px; background: #e3f2fd; color: var(--primary-blue); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;
+        }
 
-        /* --- CÁC PHẦN KHÁC GIỮ NGUYÊN --- */
+        /* --- TECH STACK --- */
         .tech-stack { padding: 50px 0; background: var(--bg-light); overflow: hidden; }
         .tech-slide { display: flex; gap: 50px; animation: slide 20s linear infinite; white-space: nowrap; }
         .tech-item { font-size: 24px; font-weight: 700; color: #cbd5e0; display: flex; align-items: center; gap: 10px; }
@@ -254,7 +260,7 @@
         .service-bg::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://www.transparenttextures.com/patterns/cubes.png'); opacity: 0.1; }
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; position: relative; z-index: 1; }
         .service-box { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
-        .service-box:hover { background: var(--primary-blue); border-color: var(--primary-blue); }
+        .service-box:hover { background: var(--primary-blue); border-color: var(--primary-blue); transform: translateY(-5px); }
         .service-box h3 { font-size: 1.5rem; margin: 20px 0 10px; }
         .service-box p { color: #a4b0be; font-size: 0.95rem; }
         .service-box:hover p { color: #fff; }
@@ -271,7 +277,9 @@
         .feature-list li { margin: 15px 0; color: var(--text-gray); font-size: 15px; }
         .feature-list i { color: #2ecc71; margin-right: 8px; }
 
-        .cta-section { background: var(--gradient); color: #fff; text-align: center; padding: 80px 0; border-radius: 20px; }
+        .cta-section { background: var(--gradient); color: #fff; text-align: center; padding: 80px 0; border-radius: 20px; position: relative; overflow: hidden; }
+        .cta-section::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); pointer-events: none; }
+        
         footer { background: var(--tech-dark); color: #fff; padding: 70px 0 20px; font-size: 14px; }
         .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 50px; }
         .footer-col h4 { color: #fff; margin-bottom: 20px; font-size: 16px; }
@@ -283,18 +291,36 @@
             .hero-grid, .about-grid, .price-table, .process-steps, .footer-grid, .story-grid { grid-template-columns: 1fr; }
             .nav-menu { display: none; }
             .hero-content h1 { font-size: 2.5rem; }
-            .hero-img { height: auto; }
-            .hero-img img { height: auto; }
+            .hero-img { height: auto; margin-top: 30px; }
             .price-col.active { transform: scale(1); }
+            .chat-window { width: 90%; right: 5%; bottom: 100px; }
         }
 
         /* LIÊN HỆ GÓC PHẢI */
-        .fixed-contact { position: fixed; bottom: 30px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 15px; }
-        .contact-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #fff; font-size: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s ease; position: relative; }
+        .fixed-contact { 
+            position: fixed; bottom: 30px; right: 20px; z-index: 9999; 
+            display: flex; flex-direction: column; gap: 15px; align-items: flex-end;
+        }
+        .contact-btn { 
+            width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center;
+            align-items: center; color: #fff; font-size: 24px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s ease; position: relative;
+        }
         .contact-btn:hover { transform: scale(1.1); }
         .contact-btn.zalo { background: #0084FF; }
         .contact-btn.phone { background: #2ecc71; animation: phone-shake 1.5s infinite; }
-        @keyframes phone-shake { 0%, 100% { transform: rotate(0); } 10%, 30% { transform: rotate(-15deg); } 20%, 40% { transform: rotate(15deg); } }
+        
+        /* Nút Chat AI */
+        .contact-btn.ai-chat {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 2px solid #fff;
+        }
+
+        @keyframes phone-shake { 
+            0%, 100% { transform: rotate(0); } 
+            10%, 30% { transform: rotate(-15deg); } 
+            20%, 40% { transform: rotate(15deg); } 
+        }
 
         /* POPUP */
         .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 100000; backdrop-filter: blur(5px); }
@@ -303,6 +329,136 @@
         .popup-close { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: #ccc; }
         .popup-badge { background: var(--primary-blue); color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 15px; display: inline-block; }
         .popup-btn { display: block; background: var(--gradient); color: #fff; padding: 15px; border-radius: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- AI CHATBOX STYLES --- */
+        .chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 90px;
+            width: 360px;
+            height: 500px;
+            background: var(--chat-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 9998;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(0);
+            transform-origin: bottom right;
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .chat-window.active {
+            transform: scale(1);
+        }
+
+        .chat-header {
+            background: var(--chat-header-bg);
+            padding: 15px 20px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+
+        .chat-info h4 { font-size: 16px; margin: 0; font-weight: 700; }
+        .chat-info span { font-size: 11px; opacity: 0.9; display: flex; align-items: center; gap: 5px; }
+        .online-dot { width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; display: inline-block; }
+
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeInMsg 0.3s ease;
+        }
+
+        @keyframes fadeInMsg { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .message.bot {
+            align-self: flex-start;
+            background: #fff;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--primary-blue);
+            color: #fff;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #eee;
+            border-radius: 25px;
+            outline: none;
+            font-family: inherit;
+            transition: 0.3s;
+        }
+
+        .chat-input-area input:focus { border-color: var(--primary-blue); }
+
+        .btn-send {
+            width: 40px; height: 40px;
+            background: var(--primary-blue);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+        }
+        .btn-send:hover { transform: scale(1.1); background: var(--deep-blue); }
+
+        .typing-indicator {
+            font-size: 12px; color: #999; font-style: italic; margin-bottom: 5px; margin-left: 5px; display: none;
+        }
     </style>
 </head>
 <body>
@@ -321,11 +477,43 @@
     </div>
 
     <div class="fixed-contact">
+        <div class="contact-btn ai-chat" onclick="toggleChat()" title="Trợ Lý Ảo Trần Hữu Luân" style="cursor: pointer;">
+            <i class="fas fa-robot"></i>
+        </div>
+
         <a href="https://zalo.me/0347285304" target="_blank" class="contact-btn zalo" title="Chat Zalo">
-            <i class="fab fa-facebook-messenger"></i> </a>
+            <i class="fab fa-facebook-messenger"></i> 
+        </a>
+    
         <a href="tel:0347285304" class="contact-btn phone" title="Gọi ngay">
             <i class="fas fa-phone-alt"></i>
         </a>
+    </div>
+
+    <div class="chat-window" id="aiChatbox">
+        <div class="chat-header">
+            <div class="chat-title">
+                <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+                <div class="chat-info">
+                    <h4>Trợ Lý Ảo</h4>
+                    <span><span class="online-dot"></span> Của Trần Hữu Luân</span>
+                </div>
+            </div>
+            <i class="fas fa-times" onclick="toggleChat()" style="cursor: pointer; opacity: 0.8;"></i>
+        </div>
+        
+        <div class="chat-body" id="chatBody">
+            <div class="message bot">
+                Xin chào! Tôi là Trợ lý ảo AI của anh <b>Trần Hữu Luân</b>. Tôi có thể giúp gì cho bạn về thiết kế Web & App hôm nay?
+            </div>
+        </div>
+        
+        <div class="typing-indicator" id="typingIndicator">Trợ lý ảo đang nhập...</div>
+
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Hỏi tôi về giá, dịch vụ..." onkeypress="handleEnter(event)">
+            <button class="btn-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
     </div>
 
     <div class="popup-overlay" id="promoPopup">
@@ -671,7 +859,7 @@
                 setTimeout(() => {
                     document.getElementById("promoPopup").style.display = "flex";
                 }, 2000);
-            }, 2500); // Tăng thời gian load để khách chiêm ngưỡng hiệu ứng lung linh
+            }, 2500);
         });
 
         function closePopup() {
@@ -690,6 +878,79 @@
             once: true,
             offset: 100
         });
+
+        /* --- JS CHO CHATBOX AI GIẢ LẬP --- */
+        function toggleChat() {
+            const chatbox = document.getElementById("aiChatbox");
+            chatbox.classList.toggle("active");
+            if(chatbox.classList.contains("active")){
+                document.getElementById("chatInput").focus();
+            }
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById("chatInput");
+            const text = input.value.trim();
+            if (text === "") return;
+
+            // Thêm tin nhắn của user
+            addMessage(text, 'user');
+            input.value = "";
+
+            // Hiển thị typing...
+            const typing = document.getElementById("typingIndicator");
+            typing.style.display = "block";
+            
+            // Cuộn xuống cuối
+            const chatBody = document.getElementById("chatBody");
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            // Giả lập AI suy nghĩ (1.5 giây)
+            setTimeout(() => {
+                typing.style.display = "none";
+                const botReply = getAIResponse(text);
+                addMessage(botReply, 'bot');
+            }, 1500);
+        }
+
+        function addMessage(text, sender) {
+            const chatBody = document.getElementById("chatBody");
+            const msgDiv = document.createElement("div");
+            msgDiv.className = `message ${sender}`;
+            msgDiv.innerHTML = text;
+            chatBody.appendChild(msgDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // --- KỊCH BẢN TRẢ LỜI CỦA TRỢ LÝ ẢO (Bạn có thể sửa ở đây) ---
+        function getAIResponse(input) {
+            input = input.toLowerCase();
+            
+            if (input.includes("giá") || input.includes("bao nhiêu") || input.includes("chi phí")) {
+                return "Dạ, bên em có gói Start-up chỉ từ <b>3.500K</b> và gói Business chuyên nghiệp là <b>7.500K</b>. Anh/chị đang quan tâm gói nào ạ?";
+            }
+            else if (input.includes("liên hệ") || input.includes("sđt") || input.includes("zalo")) {
+                return "Anh/chị có thể liên hệ trực tiếp với Founder Trần Hữu Luân qua Zalo/SĐT: <b>0347.285.304</b> để được tư vấn nhanh nhất ạ.";
+            }
+            else if (input.includes("web") || input.includes("thiết kế")) {
+                return "L-TECH chuyên thiết kế Website chuẩn SEO, giao diện đẹp và bảo mật cao. Anh/chị muốn làm web bán hàng hay web giới thiệu công ty ạ?";
+            }
+            else if (input.includes("chào") || input.includes("hi") || input.includes("hello")) {
+                return "Chào anh/chị! Em là trợ lý ảo của anh Luân. Chúc anh/chị một ngày tốt lành. Em có thể giúp gì không ạ?";
+            }
+            else if (input.includes("địa chỉ") || input.includes("ở đâu")) {
+                return "Văn phòng bên em đặt tại TP. Hồ Chí Minh ạ. Tuy nhiên L-TECH phục vụ khách hàng trên toàn quốc qua hình thức Online rất tiện lợi.";
+            }
+            else {
+                return "Cảm ơn anh/chị đã quan tâm. Câu hỏi này hơi chuyên sâu, em sẽ chuyển lời nhắn đến anh Luân và anh ấy sẽ liên hệ lại sớm nhất ạ! Hoặc anh/chị gọi <b>0347.285.304</b> nhé.";
+            }
+        }
     </script>
 </body>
 </html>
